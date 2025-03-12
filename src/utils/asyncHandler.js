@@ -17,7 +17,7 @@ export { asyncHandler }
 
 
 
-// Using try catch block
+// Using try-catch block
 
 
 // const asyncHandler = (fun) => async (req, res, next) => {
