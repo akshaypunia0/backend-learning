@@ -1,14 +1,16 @@
 // require('dotenv').config(path: "./env") // Ye import ke consistency ko kharab krta hai, but ye perfectly work krega
+console.log("Main index.js file running");
 
+import { app } from './app.js';
 import dotenv from 'dotenv'
 import connectDB from "./db/index.js";
-import { app } from './app.js';
 
 dotenv.config({
     path: './env'
 })
 
 const serverPort = process.env.PORT || 8000
+
 
 // connectDB() is a async function so it always returns a promise a promise, we need to handle it using .then 
 connectDB()

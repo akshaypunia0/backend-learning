@@ -10,4 +10,7 @@ const storage = multer.diskStorage({
       }
 })
 
+console.log("multer middleware file running");
+
+
 export const upload = multer({ storage: storage })
