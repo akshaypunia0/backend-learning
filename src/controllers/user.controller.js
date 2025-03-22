@@ -22,8 +22,6 @@ const registerUser = asyncHandler( async (req, res) => {
 
     const { userName, email, fullName, password } = req.body   // getting data from frontend
 
-    console.log("given Email is: ", email);
-
 
     // Checking if any required is empty
 
@@ -46,7 +44,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //User is created by mongoose so it can directly contact to db to check if any user exist with this username or email
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{ userName }, { email }]
     })
 
@@ -58,20 +56,36 @@ const registerUser = asyncHandler( async (req, res) => {
 
     // Checking for images and avatar
 
-    const avatarLocalPath = req.files?.avatar[0]?.path
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    // const avatarLocalPath = req.files?.avatar[0]?.path
+    // let coverImageLocalPath = req.files?.coverImage[0]?.path
 
-    if (!avatarLocalPath) {
+    let avatarLocalPath;
+
+    if(req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0){
+        avatarLocalPath = req.files.avatar[0].path
+    }
+
+    let coverImageLocalPath;
+
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
+
+
+
+    if (!avatarLocalPath || avatarLocalPath === undefined || avatarLocalPath === null) {
         throw new ApiError(400, "Avatar file is required")
     }
 
+    
+
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    
 
     if (!avatar) {
         throw new ApiError(400, "Avatar file is compulsory")
     }
-
 
 
     // creating User object and create db entry
