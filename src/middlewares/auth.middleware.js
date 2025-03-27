@@ -6,6 +6,8 @@ import { User } from "../models/user.model.js"
 
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {  // if res is not in use we can write "_" instead
+    console.log("Auth middleware running, verifyJWT vala");
+    
     try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
@@ -20,6 +22,9 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {  // if res is no
         if (!user) {
             throw new ApiError(401, "Invalid access token")
         }
+
+        console.log("User in auth middlew", user);
+        
 
         req.user = user
         next()
